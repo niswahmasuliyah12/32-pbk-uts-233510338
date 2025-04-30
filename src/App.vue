@@ -2,6 +2,7 @@
   <div class="container">
     <h1>Daftar Kegiatan</h1>
 
+    <!-- Form input kegiatan -->
     <form @submit.prevent="tambahKegiatan" class="form">
       <input
         v-model="kegiatanBaru"
@@ -12,6 +13,7 @@
       <button type="submit">Tambah</button>
     </form>
 
+    <!-- Daftar kegiatan -->
     <ul class="list">
       <li v-for="(item, index) in daftarKegiatan" :key="index">
         {{ item }}
@@ -23,13 +25,18 @@
 <script setup>
 import { ref } from 'vue'
 
+// Input kegiatan baru
 const kegiatanBaru = ref('')
+
+// Array untuk menyimpan daftar kegiatan
 const daftarKegiatan = ref([])
 
+// Fungsi menambahkan kegiatan ke daftar
 function tambahKegiatan() {
-  if (kegiatanBaru.value.trim()) {
-    daftarKegiatan.value.push(kegiatanBaru.value)
-    kegiatanBaru.value = ''
+  const teks = kegiatanBaru.value.trim()
+  if (teks !== '') {
+    daftarKegiatan.value.push(teks)
+    kegiatanBaru.value = '' // Reset input setelah ditambahkan
   }
 }
 </script>
@@ -56,6 +63,15 @@ input {
 button {
   padding: 0.5rem 1rem;
   font-size: 1rem;
+  background-color: #42b983;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #369870;
 }
 
 .list {

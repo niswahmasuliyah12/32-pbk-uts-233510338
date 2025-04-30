@@ -13,10 +13,18 @@
       <button type="submit">Tambah</button>
     </form>
 
+    <!-- Filter checkbox -->
+    <div class="filter">
+      <label>
+        <input type="checkbox" v-model="tampilkanBelumSelesai" />
+        Tampilkan hanya yang belum selesai
+      </label>
+    </div>
+
     <!-- Daftar kegiatan -->
     <ul class="list">
       <li
-        v-for="(item, index) in daftarKegiatan"
+        v-for="(item, index) in kegiatanTersaring"
         :key="index"
         class="list-item"
         :class="{ selesai: item.selesai }"
@@ -32,15 +40,25 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 // Input kegiatan baru
 const kegiatanBaru = ref('')
 
-// Daftar kegiatan (berisi objek { nama: string, selesai: boolean })
+// Daftar kegiatan
 const daftarKegiatan = ref([])
 
-// Tambahkan kegiatan ke daftar
+// Filter: hanya tampilkan yang belum selesai
+const tampilkanBelumSelesai = ref(false)
+
+// Computed: kegiatan yang sesuai filter
+const kegiatanTersaring = computed(() => {
+  return tampilkanBelumSelesai.value
+    ? daftarKegiatan.value.filter(item => !item.selesai)
+    : daftarKegiatan.value
+})
+
+// Tambah kegiatan
 function tambahKegiatan() {
   const teks = kegiatanBaru.value.trim()
   if (teks !== '') {
@@ -49,7 +67,7 @@ function tambahKegiatan() {
   }
 }
 
-// Hapus kegiatan dari daftar
+// Hapus kegiatan
 function hapusKegiatan(index) {
   daftarKegiatan.value.splice(index, 1)
 }
@@ -66,6 +84,7 @@ function hapusKegiatan(index) {
 .form {
   display: flex;
   gap: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 input[type="text"] {
@@ -88,10 +107,14 @@ button:hover {
   background-color: #369870;
 }
 
+.filter {
+  margin-bottom: 1rem;
+}
+
 .list {
-  margin-top: 1rem;
   list-style: none;
   padding: 0;
+  margin-top: 1rem;
 }
 
 .list-item {

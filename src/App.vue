@@ -15,8 +15,9 @@
 
     <!-- Daftar kegiatan -->
     <ul class="list">
-      <li v-for="(item, index) in daftarKegiatan" :key="index">
+      <li v-for="(item, index) in daftarKegiatan" :key="index" class="list-item">
         {{ item }}
+        <button @click="hapusKegiatan(index)" class="hapus">Batalkan</button>
       </li>
     </ul>
   </div>
@@ -28,16 +29,21 @@ import { ref } from 'vue'
 // Input kegiatan baru
 const kegiatanBaru = ref('')
 
-// Array untuk menyimpan daftar kegiatan
+// Daftar kegiatan
 const daftarKegiatan = ref([])
 
-// Fungsi menambahkan kegiatan ke daftar
+// Tambah kegiatan ke daftar
 function tambahKegiatan() {
   const teks = kegiatanBaru.value.trim()
   if (teks !== '') {
     daftarKegiatan.value.push(teks)
-    kegiatanBaru.value = '' // Reset input setelah ditambahkan
+    kegiatanBaru.value = ''
   }
+}
+
+// Hapus kegiatan berdasarkan index
+function hapusKegiatan(index) {
+  daftarKegiatan.value.splice(index, 1)
 }
 </script>
 
@@ -80,10 +86,25 @@ button:hover {
   padding: 0;
 }
 
-li {
+.list-item {
+  display: flex;
+  justify-content: space-between;
   background: #f0f0f0;
   margin-bottom: 0.5rem;
   padding: 0.5rem;
   border-radius: 4px;
+}
+
+.hapus {
+  background-color: #ff5c5c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.3rem 0.7rem;
+  cursor: pointer;
+}
+
+.hapus:hover {
+  background-color: #d94a4a;
 }
 </style>

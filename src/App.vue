@@ -15,8 +15,16 @@
 
     <!-- Daftar kegiatan -->
     <ul class="list">
-      <li v-for="(item, index) in daftarKegiatan" :key="index" class="list-item">
-        {{ item }}
+      <li
+        v-for="(item, index) in daftarKegiatan"
+        :key="index"
+        class="list-item"
+        :class="{ selesai: item.selesai }"
+      >
+        <label>
+          <input type="checkbox" v-model="item.selesai" />
+          <span>{{ item.nama }}</span>
+        </label>
         <button @click="hapusKegiatan(index)" class="hapus">Batalkan</button>
       </li>
     </ul>
@@ -29,19 +37,19 @@ import { ref } from 'vue'
 // Input kegiatan baru
 const kegiatanBaru = ref('')
 
-// Daftar kegiatan
+// Daftar kegiatan (berisi objek { nama: string, selesai: boolean })
 const daftarKegiatan = ref([])
 
-// Tambah kegiatan ke daftar
+// Tambahkan kegiatan ke daftar
 function tambahKegiatan() {
   const teks = kegiatanBaru.value.trim()
   if (teks !== '') {
-    daftarKegiatan.value.push(teks)
+    daftarKegiatan.value.push({ nama: teks, selesai: false })
     kegiatanBaru.value = ''
   }
 }
 
-// Hapus kegiatan berdasarkan index
+// Hapus kegiatan dari daftar
 function hapusKegiatan(index) {
   daftarKegiatan.value.splice(index, 1)
 }
@@ -60,7 +68,7 @@ function hapusKegiatan(index) {
   gap: 0.5rem;
 }
 
-input {
+input[type="text"] {
   flex: 1;
   padding: 0.5rem;
   font-size: 1rem;
@@ -89,10 +97,22 @@ button:hover {
 .list-item {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   background: #f0f0f0;
   margin-bottom: 0.5rem;
   padding: 0.5rem;
   border-radius: 4px;
+}
+
+.list-item label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.list-item.selesai span {
+  text-decoration: line-through;
+  color: gray;
 }
 
 .hapus {
